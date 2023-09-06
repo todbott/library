@@ -1,18 +1,21 @@
 import Book from './Book'
 
-const BookShelf = () => {
+const BookShelf = ({ shelf, books, shelfChange }) => {
 
     return (
         <div className="bookshelf">
-        <h2 className="bookshelf-title">Currently Reading</h2>
+        <h2 className="bookshelf-title">{shelf}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            <li>
-                <Book />
-            </li>
-            <li>
-                <Book />
-            </li>
+            {
+                books.map(b => {
+                    return (
+                    <li key={b.id}>
+                        <Book book={b} shelfChange={shelfChange} />
+                    </li>
+                    )
+                })
+            }
           </ol>
         </div>
       </div>
