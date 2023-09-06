@@ -16,8 +16,8 @@ const Book = ({ book, shelfChange }) => {
             }}
           ></div>
           <div className="book-shelf-changer">
-            <select onChange={sendUpChangeRequest} defaultValue={book.shelf}>
-              <option value="none" disabled>
+            <select onChange={sendUpChangeRequest} defaultValue={(book.shelf) ? book.shelf : "none"}>
+              <option value="moveTo" disabled>
                 Move to...
               </option>
               <option value="currentlyReading">

@@ -6,12 +6,12 @@ import Book from "./Book";
 const SearchPage = () => {
 
     const [userInput, setUserInput] = useState("");
-    const [allBooks, setAllBooks] = useState([])
+    const [myBooks, setMyBooks] = useState([])
     const [showingBooks, setShowingBooks] = useState([])
 
     useEffect(() => {
         getAll().then((response) => {
-                setAllBooks(response)
+                setMyBooks(response)
             }
         );
         
@@ -19,20 +19,44 @@ const SearchPage = () => {
 
     const shelfChange = async (shelf, book) => {
         let updateResult = await update(book, shelf);
-        let allBooks = await getAll();
-        setAllBooks(allBooks);
+        let allMyBooks = await getAll();
+        setMyBooks(allMyBooks);
         }
 
     const setInput = async (event) => {
+        // Put user input into the state
         setUserInput(event.target.value);
+
+        // Get all books that exist (all MY books are in the myBooks state)
         let allBooks = await search(event.target.value);
-        setAllBooks(allBooks);
+
         console.log(allBooks)
         if (event.target.value.length === 0) {
             setShowingBooks([])
         } else {
-            setShowingBooks(allBooks)
-        }
+            let reShelved = [];
+            Object.entries(myBooks).forEach(([key, value]) => {
+      
+            let title = value['title']
+            let shelf = value['shelf']
+            console.log(title)
+            console.log(shelf)
+          
+            allBooks.map((b) => {
+                  if (b.title === title) {
+                    b.shelf = shelf
+                    console.log("chagned the shelf of " + b.title + " from " + b.shelf + " to " + shelf);
+                    reShelved.push(b)
+                  } else {
+                    reShelved.push(b)
+                  }
+            
+                })
+            
+        })
+        console.log(reShelved)
+        setShowingBooks(reShelved)
+    }
         
     }
 
@@ -54,7 +78,8 @@ const SearchPage = () => {
         <div className="search-books-results">
         <ol className="books-grid">
             {
-                showingBooks.map(b => {
+                (showingBooks.length > 0) && (
+                    showingBooks.map(b => {
                     return (
                         <li key={b.id}>
                             <Book book={b} shelfChange={shelfChange} />
@@ -62,6 +87,7 @@ const SearchPage = () => {
                     )
                     
                 })
+                )
             }
         </ol>
         </div>
