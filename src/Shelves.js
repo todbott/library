@@ -24,7 +24,6 @@ const Shelves = () => {
             setCurrentlyReading(response.filter(b => b.shelf == "currentlyReading"))
             setWantToRead(response.filter(b => b.shelf == "wantToRead"))
             setRead(response.filter(b => b.shelf == "read"))
-            console.log(response);
             }
             
         );

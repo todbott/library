@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { get, getAll, update, search }   from './BooksAPI';
+import { getAll, update, search }   from './BooksAPI';
 import Book from "./Book";
 
 const SearchPage = () => {
@@ -18,7 +18,7 @@ const SearchPage = () => {
     }, [])
 
     const shelfChange = async (shelf, book) => {
-        let updateResult = await update(book, shelf);
+        await update(book, shelf);
         let allMyBooks = await getAll();
         setMyBooks(allMyBooks);
         }
@@ -26,38 +26,31 @@ const SearchPage = () => {
     const setInput = async (event) => {
         // Put user input into the state
         setUserInput(event.target.value);
+        if (event.target.value.length === 0) {
+            setShowingBooks([])
+            return
+        }
 
         // Get all books that exist (all MY books are in the myBooks state)
         let allBooks = await search(event.target.value);
+        if (allBooks.hasOwnProperty('error')) {
+            return
+        }
 
-        console.log(allBooks)
-        if (event.target.value.length === 0) {
-            setShowingBooks([])
-        } else {
-            let reShelved = [];
-            Object.entries(myBooks).forEach(([key, value]) => {
-      
-            let title = value['title']
-            let shelf = value['shelf']
-            console.log(title)
-            console.log(shelf)
-          
-            allBooks.map((b) => {
-                  if (b.title === title) {
-                    b.shelf = shelf
-                    console.log("chagned the shelf of " + b.title + " from " + b.shelf + " to " + shelf);
-                    reShelved.push(b)
-                  } else {
-                    reShelved.push(b)
-                  }
-            
-                })
-            
-        })
-        console.log(reShelved)
-        setShowingBooks(reShelved)
-    }
+        let reShelved = [];
+        Object.entries(myBooks).forEach(([key, value]) => {
         
+        allBooks.map((b) => {
+                if (b.title === value['title']) {
+                b.shelf = value['shelf']
+                reShelved.push(b)
+                }      
+            })
+        })
+        allBooks.some(b=> {
+            !(reShelved.indexOf(b) >= 0) && reShelved.push(b)
+        })
+        setShowingBooks(reShelved)
     }
 
     return (
@@ -85,7 +78,6 @@ const SearchPage = () => {
                             <Book book={b} shelfChange={shelfChange} />
                         </li>
                     )
-                    
                 })
                 )
             }
