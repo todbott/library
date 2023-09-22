@@ -6,12 +6,12 @@ import SearchPage from "./SearchPage";
 function App() {
 
   return (
-    
+
     <div className="app">
-    <Routes>
-      <Route exact path="/" element={<Shelves />} />
-      <Route path="/search" element={<SearchPage />}/>
-    </Routes>
+      <Routes>
+        <Route exact path="/" element={<Shelves />} />
+        <Route path="/search" element={<SearchPage />} />
+      </Routes>
     </div>
   );
 }
