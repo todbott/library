@@ -1,7 +1,7 @@
-import { Link, Route, Routes, BrowserRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import BookShelf from "./Bookshelf";
 import SearchPage from './SearchPage';
-import { get, getAll, update}   from './BooksAPI';
+import { getAll, update}   from './BooksAPI';
 import { useState, useEffect } from 'react';
 
 const Shelves = () => {
@@ -11,19 +11,19 @@ const Shelves = () => {
     const [read, setRead] = useState([])
 
     const shelfChange = async (shelf, book) => {
-        let updateResult = await update(book, shelf);
+        await update(book, shelf);
         let allBooks = await getAll();
-        setCurrentlyReading(allBooks.filter(b => b.shelf == "currentlyReading"))
-        setWantToRead(allBooks.filter(b => b.shelf == "wantToRead"))
-        setRead(allBooks.filter(b => b.shelf == "read"))
+        setCurrentlyReading(allBooks.filter(b => b.shelf === "currentlyReading"))
+        setWantToRead(allBooks.filter(b => b.shelf === "wantToRead"))
+        setRead(allBooks.filter(b => b.shelf === "read"))
         }
     
 
     useEffect(() => {
         getAll().then((response) => {
-            setCurrentlyReading(response.filter(b => b.shelf == "currentlyReading"))
-            setWantToRead(response.filter(b => b.shelf == "wantToRead"))
-            setRead(response.filter(b => b.shelf == "read"))
+            setCurrentlyReading(response.filter(b => b.shelf === "currentlyReading"))
+            setWantToRead(response.filter(b => b.shelf === "wantToRead"))
+            setRead(response.filter(b => b.shelf === "read"))
             }
             
         );

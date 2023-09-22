@@ -1,12 +1,9 @@
 import "./App.css";
-import { Link, Route, Routes, BrowserRouter } from 'react-router-dom';
-import BookShelf from "./Bookshelf";
+import { Route, Routes } from 'react-router-dom';
 import Shelves from "./Shelves";
 import SearchPage from "./SearchPage";
-import { useState } from "react";
 
 function App() {
-  const [showSearchPage, setShowSearchpage] = useState(false);
 
   return (
     
