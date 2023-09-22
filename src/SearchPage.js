@@ -40,14 +40,14 @@ const SearchPage = () => {
         let reShelved = [];
         Object.entries(myBooks).forEach(([key, value]) => {
         
-        allBooks.map((b) => {
+        allBooks.forEach((b) => {
                 if (b.title === value['title']) {
                 b.shelf = value['shelf']
                 reShelved.push(b)
                 }      
             })
         })
-        allBooks.some(b=> {
+        allBooks.forEach(b=> {
             !(reShelved.indexOf(b) >= 0) && reShelved.push(b)
         })
         setShowingBooks(reShelved)
