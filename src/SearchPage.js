@@ -8,6 +8,7 @@ const SearchPage = () => {
     const [userInput, setUserInput] = useState("");
     const [myBooks, setMyBooks] = useState([])
     const [showingBooks, setShowingBooks] = useState([])
+    const [error, setError] = useState(false)
 
     useEffect(() => {
         getAll().then((response) => {
@@ -25,6 +26,7 @@ const SearchPage = () => {
 
     const setInput = async (event) => {
         // Put user input into the state
+        setError(false)
         setUserInput(event.target.value);
         if (event.target.value.length === 0) {
             setShowingBooks([])
@@ -33,7 +35,10 @@ const SearchPage = () => {
 
         // Get all books that exist (all MY books are in the myBooks state)
         let allBooks = await search(event.target.value);
+        console.log(allBooks)
         if (allBooks.hasOwnProperty('error')) {
+            setShowingBooks([])
+            setError(true)
             return
         }
 
@@ -71,6 +76,13 @@ const SearchPage = () => {
             <div className="search-books-results">
                 <ol className="books-grid">
                     {
+                        error ? (
+                            <div>
+                                <h3>
+                                No books match that search string. Please try again.
+                                </h3>
+                            </div>
+                        ) :
                         (showingBooks.length > 0) && (
                             showingBooks.map(b => {
                                 return (
